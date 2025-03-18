@@ -91,4 +91,74 @@ function ItineraryView({ itinerary }) {
                           <div className="flex items-center">
                             <CurrencyDollarIcon className="h-4 w-4 mr-1" />
                             <span>
-                              ${activity.price.toFixed(2)}
+                              ${activity.price.toFixed(2)} 
+                              {activityDetails.priceDetails?.perPerson ? 
+                                ` (${activity.participants} ${activity.participants === 1 ? 'guest' : 'guests'})` : ''}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      
+      {/* Price Summary */}
+      <div className="p-6 bg-gray-100 border-t">
+        <h3 className="text-xl font-semibold mb-4">Price Summary</h3>
+        
+        <div className="space-y-2 mb-4">
+          {sortedDates.map(dateStr => {
+            const date = new Date(dateStr);
+            const formattedDate = format(date, 'MMM d');
+            const activities = activitiesByDate[dateStr];
+            const dateTotal = activities.reduce((sum, activity) => sum + activity.price, 0);
+            
+            return (
+              <div key={dateStr} className="flex justify-between">
+                <span>{formattedDate}</span>
+                <span>${dateTotal.toFixed(2)}</span>
+              </div>
+            );
+          })}
+        </div>
+        
+        <div className="pt-4 border-t border-gray-300">
+          <div className="flex justify-between font-semibold text-lg">
+            <span>Total</span>
+            <span>${itinerary.totalPrice.toFixed(2)}</span>
+          </div>
+          
+          <div className="mt-2 text-sm text-gray-600">
+            <p>
+              {itinerary.guestCount > 1 && (
+                <>Per person: ${(itinerary.totalPrice / itinerary.guestCount).toFixed(2)}</>
+              )}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Action buttons */}
+      <div className="p-6 border-t flex flex-wrap gap-4 justify-end">
+        <button
+          className="px-6 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+        >
+          Edit Itinerary
+        </button>
+        
+        <button
+          className="px-6 py-2 bg-blue-800 text-white hover:bg-blue-700 rounded-md transition-colors"
+        >
+          Download PDF
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default ItineraryView;
